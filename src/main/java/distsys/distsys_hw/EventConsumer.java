@@ -48,8 +48,14 @@ public class EventConsumer implements Runnable {
 	private void printEvent() {
 		IMap<Integer, Event> map = client.getMap("events");
 		Event[] events = map.values().toArray(new Event[0]);
-		Arrays.sort(events, new EventComparator());
-		Event e = events[0];
+		// Arrays.sort(events, new EventComparator());
+		Event minEvent = null;
+		for (Event e : map.values()) {
+			if (minEvent == null || minEvent.getTime() > e.getTime()) {
+				minEvent = e;
+			}
+		}
+		Event e = minEvent;
 		System.out.println("oldest event: id=" + e.getId() + ", name="
 				+ e.getName() + ", time=" + sdf.format(new Date(e.getTime())));
 	}
@@ -65,7 +71,7 @@ public class EventConsumer implements Runnable {
 				e.printStackTrace();
 			}
 			requestCount();
-			requestOldest();
+			requestPseudonym((long) (Math.random() * 10000));
 			// printEvent();
 			// removeOldestEvents(1);
 		}
@@ -84,13 +90,33 @@ public class EventConsumer implements Runnable {
 	private void requestOldest() {
 		IMap<Integer, Event> map = client.getMap("events");
 		long start = System.currentTimeMillis();
-		Event[] events = map.values().toArray(new Event[0]);
-		Arrays.sort(events, new EventComparator());
-		Event e = events[0];
+		// Event[] events = map.values().toArray(new Event[0]);
+		// Arrays.sort(events, new EventComparator());
+		Event minEvent = null;
+		for (Event e : map.values()) {
+			if (minEvent == null || minEvent.getTime() > e.getTime()) {
+				minEvent = e;
+			}
+		}
+		Event e = minEvent;
 		System.out.println("oldest event: id=" + e.getId() + ", name="
 				+ e.getName() + ", time=" + sdf.format(new Date(e.getTime()))
 				+ " : "
 				+ time.format(new Date(System.currentTimeMillis() - start)));
 		System.out.println();
+	}
+
+	private void requestPseudonym(long pseudonym) {
+		long start = System.currentTimeMillis();
+		IMap<Integer, Event> map = client.getMap("events");
+		EntryObject entryObject = new PredicateBuilder().getEntryObject();
+		@SuppressWarnings("unchecked")
+		Predicate<Integer, Event> predicate = entryObject.get("pseudonym")
+				.equal(pseudonym);
+		Collection<Event> events = (Collection<Event>) map.values(predicate);
+		System.out.println("pseudonym: " + pseudonym + ", size: "
+				+ events.size() + ", time: "
+				+ time.format(new Date(System.currentTimeMillis() - start)));
+
 	}
 }

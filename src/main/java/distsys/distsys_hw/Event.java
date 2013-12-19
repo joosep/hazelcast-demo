@@ -12,11 +12,13 @@ public class Event implements Serializable {
 	private long id;
 	private String name;
 	private long time;
+	private long pseudonym;
 
-	public Event(long id, String name, long time) {
+	public Event(long id, String name, long time, long pseudonym ) {
 		this.setId(id);
 		this.setName(name);
 		this.setTime(time);
+		this.setPseudonym(pseudonym);
 	}
 
 	public String getName() {
@@ -41,5 +43,13 @@ public class Event implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public long getPseudonym() {
+		return pseudonym;
+	}
+
+	public void setPseudonym(long pseudonym) {
+		this.pseudonym = pseudonym;
 	}
 }

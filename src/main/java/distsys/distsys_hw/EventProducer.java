@@ -23,7 +23,7 @@ public class EventProducer implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		String clusterIP =args[0];// "192.168.1.11:5701";
+		String clusterIP = args[0];// "192.168.1.11:5701";
 		EventProducer consumer = new EventProducer(clusterIP);
 		consumer.run();
 	}
@@ -37,11 +37,14 @@ public class EventProducer implements Runnable {
 				e1.printStackTrace();
 			}
 			long id = idGenerator.newId();
-			Event e = new Event(id, "name" + id, System.currentTimeMillis());
+			Event e = new Event(id, "name" + id, System.currentTimeMillis(),
+					(long) (Math.random() * 10000));
 			map.put(id++, e);
 		}
 	}
-public int sleepTime=1000;
+
+	public int sleepTime = 1000;
+
 	public void run() {
 		while (true) {
 			addEvents();
