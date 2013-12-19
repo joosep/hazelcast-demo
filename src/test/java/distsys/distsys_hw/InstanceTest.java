@@ -25,9 +25,9 @@ public class InstanceTest extends TestCase {
 		Config cfg = new Config();
 		cfg.setProperty("hazelcast.logging.type", "none");
 		HazelcastInstance instance = Hazelcast.newHazelcastInstance(cfg);
-		instance.getMap("events").addIndex("time", true);
+		instance.getMap("events").addIndex("pseudonym", true);
 //		String address = instance.getCluster().getLocalMember()
-//				.getInetSocketAddress().getAddress().getHostAddress()
+//				.getInetSocketAddreseeliss().getAddress().getHostAddress()
 //				+ ":"
 //				+ instance.getCluster().getLocalMember().getInetSocketAddress()
 //						.getPort();
