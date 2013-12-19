@@ -6,7 +6,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.IdGenerator;
 
-public class EventProducer {
+public class EventProducer implements Runnable {
 	HazelcastInstance client;
 	IdGenerator idGenerator;
 
@@ -25,15 +25,7 @@ public class EventProducer {
 	public static void main(String[] args) {
 		String clusterIP =args[0];// "192.168.1.11:5701";
 		EventProducer consumer = new EventProducer(clusterIP);
-		while (true) {
-			consumer.addEvents();
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		consumer.run();
 	}
 
 	private void addEvents() {
@@ -47,6 +39,18 @@ public class EventProducer {
 			long id = idGenerator.newId();
 			Event e = new Event(id, "name" + id, System.currentTimeMillis());
 			map.put(id++, e);
+		}
+	}
+public int sleepTime=1000;
+	public void run() {
+		while (true) {
+			addEvents();
+			try {
+				Thread.sleep(sleepTime);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }
